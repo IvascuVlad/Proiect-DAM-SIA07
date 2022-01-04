@@ -1,6 +1,5 @@
 package DAM.application.services;
 
-import DAM.AppPersistenceEMFConfig;
 import DAM.models.Contract;
 import DAM.repositories.IContractEntityRepository;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,6 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.assertTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = AppPersistenceEMFConfig.class)
 public class TestProjectEntityRepositorySpringDataAudit {
     private static Logger logger = Logger.getLogger(TestProjectEntityRepositorySpringDataAudit.class.getName());
 

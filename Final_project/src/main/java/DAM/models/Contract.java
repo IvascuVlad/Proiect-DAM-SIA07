@@ -74,7 +74,7 @@ public class Contract implements Comparable<Contract>, Serializable{
 
     @Override
     public String toString() {
-        String response = "Contract [contractID=" + contractID + ", user=" + user.toString() + ", postions=";
+        String response = "Contract [ contractID=" + contractID + ", user=" + user.toString() + ", postions=";
         for(Position position:positions){
             response += position.toString();
         }

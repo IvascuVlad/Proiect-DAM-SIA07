@@ -47,14 +47,14 @@ public class PersonalDataEntityController {
         return new ResponseEntity<>(personalData.toString(), HttpStatus.OK);
     }
 
-    @PutMapping("/{firstName}")
-    public ResponseEntity<String> updateStudy(@PathVariable String firstName, @RequestParam String lastName, @RequestParam String phoneNo, @RequestParam String address) {
-        if(firstName.equals("") && lastName.equals("")){
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateStudy(@PathVariable Integer id, @RequestParam String lastName, @RequestParam String phoneNo, @RequestParam String address) {
+        if( lastName.equals("")){
             return new ResponseEntity<>("Not a valid name!", HttpStatus.OK);
         }
         List<PersonalData> personalDatas = repository.findAll();
         for(PersonalData personalData: personalDatas){
-            if(personalData.getFirstName().equals(firstName) && personalData.getLastName().equals(lastName)){
+            if(personalData.getDataID().equals(id)){
                 //personalData.setPhoneNo(phoneNo);
                 personalData.setAddress(address);
                 repository.save(personalData);
@@ -64,29 +64,15 @@ public class PersonalDataEntityController {
         return new ResponseEntity<>("Not found!", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{firstName}")
-    public ResponseEntity<String> deleteGame(@PathVariable String firstName, @RequestParam String lastName) {
-        if(firstName.equals("") && lastName.equals("")){
-            return new ResponseEntity<>("Not a valid name!", HttpStatus.OK);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteGame(@PathVariable Integer id) {
         List<PersonalData> personalDatas = repository.findAll();
         for(PersonalData personalData: personalDatas){
-            if(personalData.getFirstName().equals(firstName) && personalData.getLastName().equals(lastName)){
+            if(personalData.getDataID().equals(id)){
                 repository.delete(personalData);
                 return new ResponseEntity<>("Personal data deleted!", HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("Not found!", HttpStatus.OK);
-    }
-
-    public PersonalData getById(Integer id){
-        String urio = "http://localhost:8081/personal/" + id;
-        System.out.println("AICI BA " + urio);
-        RestTemplate restTemplate = new RestTemplate();
-        Map<String, String> map = new HashMap<>();
-
-        ResponseEntity<PersonalData> response = restTemplate.getForEntity(urio, PersonalData.class);
-        System.out.println("AICI BA" + response.getBody().toString());
-        return response.getBody();
     }
 }

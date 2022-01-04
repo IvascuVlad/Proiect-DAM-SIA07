@@ -31,14 +31,14 @@ public class ContractEntityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getContract(@PathVariable Integer id) {
+    public ResponseEntity<Contract> getContract(@PathVariable Integer id) {
         List<Contract> contracts = repository.findAll();
         for(Contract contract:contracts){
             if(contract.getContractID().equals(id)){
-                return new ResponseEntity<>(contract.toString(), HttpStatus.OK);
+                return new ResponseEntity<>(contract, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("Not a valid contract id", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Contract(), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping
@@ -74,7 +74,7 @@ public class ContractEntityController {
             tmpPositionsList.add(position);
             newContract = new Contract(user,tmpPositionsList);
             repository.save(newContract);
-            return new ResponseEntity<>("The simple contract was created!", HttpStatus.CREATED);
+            return new ResponseEntity<>(newContract.toString(), HttpStatus.CREATED);
         }else if (positionsIDsArray.length == 2){
             //Position position1 = null, position2= null;
 
@@ -97,7 +97,7 @@ public class ContractEntityController {
             ContractEntityFactory contractEntityFactory =  new ContractEntityFactory();
             Contract newContract = contractEntityFactory.buildContractWith2P(user, position1, position2);
             repository.save(newContract);
-            return new ResponseEntity<>("The contract with two positions was created!", HttpStatus.CREATED);
+            return new ResponseEntity<>(newContract.toString(), HttpStatus.CREATED);
         }else{
             List <Position> tmpPositionsList = new ArrayList<>();
             for(String positionID:positionsIDsArray){
@@ -112,7 +112,7 @@ public class ContractEntityController {
             ContractEntityFactory contractEntityFactory =  new ContractEntityFactory();
             Contract newContract = contractEntityFactory.buildPositionWithNP(user, tmpPositionsList);
             repository.save(newContract);
-            return new ResponseEntity<>("The contract with all positions was created!", HttpStatus.CREATED);
+            return new ResponseEntity<>(newContract.toString(), HttpStatus.CREATED);
         }
     }
 
@@ -120,7 +120,7 @@ public class ContractEntityController {
     public ResponseEntity<String> updateGame(@PathVariable Integer id, @RequestParam String positionID) {
         List<Contract> contracts = repository.findAll();
         for(Contract contract:contracts){
-            if(contract.getUser().getUserID().equals(id)){
+            if(contract.getContractID().equals(id)){
                 String urio = "http://localhost:8081/position/" + positionID;
                 RestTemplate restTemplate = new RestTemplate();
                 ResponseEntity<Position> positionResponse = restTemplate.getForEntity(urio, Position.class);
@@ -138,7 +138,7 @@ public class ContractEntityController {
                 return new ResponseEntity<>("The simple contract was created!", HttpStatus.CREATED);
             }
         }
-        return new ResponseEntity<>("Not a valid contarct id!", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Not a valid contract id!", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -150,6 +150,6 @@ public class ContractEntityController {
                 return new ResponseEntity<>("Contarct with id = " + id + " removed", HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("Contract not found", HttpStatus.GONE);
+        return new ResponseEntity<>("Contract not found", HttpStatus.BAD_REQUEST);
     }
 }

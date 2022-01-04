@@ -105,7 +105,7 @@ public class PersonalData implements Comparable<PersonalData>, Serializable {
     }
     @Override
     public String toString() {
-        return "Personal Data [firstName=" + firstName + ", lastName=" + lastName
+        return "Personal Data [ ID=" + dataID + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", phoneNo=" + phoneNo + ", address=" + address + "]";
     }
 
